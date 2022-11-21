@@ -5,7 +5,8 @@ import {TypeOrmModule} from '@nestjs/typeorm';
 import { DataSource } from 'typeorm';
 
 //Module
-import { UsersModule } from './users/users.module';
+
+
 
 
 
@@ -14,13 +15,15 @@ import { User } from './users/user.entity';
 import { Project } from './projects/project.entity';
 import { ProjectUser } from './project-users/project-user.entity';
 import { Event } from './events/event.entity';
+import { UserModule } from './users/user.module';
+import { AuthModule } from './auth/auth.module';
 
 
 @Module({
   imports: [
     ConfigModule.forRoot({isGlobal: true}),
     TypeOrmModule.forRootAsync({
-      imports: [ConfigModule,UsersModule],
+      imports: [ConfigModule,],
       useFactory: (configService: ConfigService) => ({
         type: 'postgres',
         host: configService.get('DB_HOST'),
@@ -33,8 +36,12 @@ import { Event } from './events/event.entity';
       }),
       inject: [ConfigService],
     }),
+    UserModule,
+    AuthModule,
   ],
   controllers: [],
   providers: [],
 })
-export class AppModule {}
+export class AppModule {
+  constructor(private dataSource: DataSource) {}
+}
