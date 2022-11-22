@@ -4,7 +4,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { AuthService } from '../auth/services/auth.service';
 import { UsersController } from './controllers/users.controller';
 import { UsersService } from './services/users.service';
-import { User } from './user.entity';
+import { User } from './dto/user.entity';
 
 
 @Module({

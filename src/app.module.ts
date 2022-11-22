@@ -11,7 +11,7 @@ import { DataSource } from 'typeorm';
 
 
 //Entity
-import { User } from './users/user.entity';
+import { User } from './users/dto/user.entity';
 import { Project } from './projects/project.entity';
 import { ProjectUser } from './project-users/project-user.entity';
 import { Event } from './events/event.entity';
