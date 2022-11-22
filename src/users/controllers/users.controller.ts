@@ -2,11 +2,14 @@ import { Controller, Post, Body, UsePipes,ValidationPipe, UseInterceptors, Class
 import { UsersService } from '../services/users.service';
 import { CreateUserDto } from '../dto/create-user.dto';
 import { User } from '../dto/user.entity';
-import { AuthlocalGuard } from '../../auth/guards/auth.guard';
+import { LocalAuthGuard } from '../../auth/guards/auth.guard';
 import { AuthService } from '../../auth/services/auth.service';
 import { UserByIdDto } from '../dto/user-by-id.dto';
-import { JwtGuard } from '../../auth/guards/jwt.guard';
-import { JwtToken} from  '../../auth/interface/jwtoken';
+import { JwtAuthGuard } from '../../auth/guards/jwt.guard';
+import { JwtToken } from '../../auth/interface/Jwtoken';
+import { UserDto } from '../dto/user.dto';
+import { plainToInstance } from 'class-transformer';
+// import { JwtToken} from  '../../auth/interface/jwtoken';
 
 @Controller('users')
 @UseInterceptors(ClassSerializerInterceptor)
@@ -15,38 +18,44 @@ export class UsersController {
     private usersService: UsersService,
     private authService: AuthService ) {}
 
+  
+  @UsePipes(ValidationPipe)
   @Post('auth/sign-up')
-  @UsePipes(ValidationPipe)
-  signUp( @Body () createUserDto: CreateUserDto): Promise<User> {
-    return this.usersService.createUser(createUserDto);
-
+  signUp(@Body() user: CreateUserDto): Promise<UserDto> {
+    return this.usersService
+      .createUser(user)
+      .then((it) => plainToInstance(UserDto, it));
   }
-  @UseGuards(AuthlocalGuard)
-  @Post('auth/login')
+  @UseGuards(LocalAuthGuard)
   @UsePipes(ValidationPipe)
+  @Post('auth/login')
   async login(@Req() req: Request & { user: User }) {
     return this.authService.login(req.user);
     }
 
-    @UseGuards(JwtGuard)
+    @UseGuards(JwtAuthGuard)
     @Get(':id')
-    findById(@Param() params: UserByIdDto): Promise<User> {  
-      return this.usersService.findOneById(params.id);
+    findById(@Param() params: UserByIdDto): Promise<UserDto> {  
+      return this.usersService
+      .getProfileId(params.id)
+      .then((it) => plainToInstance(UserDto, it));
       
     }
 
-  @UseGuards(JwtGuard)
+    @UseGuards(JwtAuthGuard)
+    @Get('me')
+    getProfile(@Req() req: Request & { user: JwtToken }): Promise<UserDto> {    
+      return this.usersService
+      .getProfileId(req.user.sub)
+      .then((it) => plainToInstance(UserDto, it));
+      
+    }
+
+  @UseGuards(JwtAuthGuard)
   @Get()
   findAll(): Promise<User[]> {
     return this.usersService.findAll();
   }
-
-  // UseGuards(JwtGuard)
-  // @Get('me')
-  // me(@Req() req: Request & { user: JwtToken }): Promise<User> {
-  //   return this.usersService.findOneById(req.user.id);
-  // }
-
 
 }
   

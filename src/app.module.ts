@@ -1,22 +1,19 @@
 /* eslint-disable prettier/prettier */
-import { Module } from '@nestjs/common';
+import { Module, ValidationPipe } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import {TypeOrmModule} from '@nestjs/typeorm';
-import { DataSource } from 'typeorm';
 
 //Module
 
 
-
-
-
 //Entity
 import { User } from './users/dto/user.entity';
-import { Project } from './projects/project.entity';
+import { Project } from './projects/dto/project.entity';
 import { ProjectUser } from './project-users/project-user.entity';
 import { Event } from './events/event.entity';
 import { UserModule } from './users/user.module';
 import { AuthModule } from './auth/auth.module';
+import { APP_PIPE } from '@nestjs/core';
 
 
 @Module({
@@ -40,8 +37,11 @@ import { AuthModule } from './auth/auth.module';
     AuthModule,
   ],
   controllers: [],
-  providers: [],
+  providers: [{
+    provide: APP_PIPE,
+    useClass: ValidationPipe,
+  },],
 })
 export class AppModule {
-  constructor(private dataSource: DataSource) {}
+
 }

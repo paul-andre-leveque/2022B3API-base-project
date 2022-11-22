@@ -17,20 +17,20 @@ export class UsersService {
       return await this.usersRepository.find();
     }
 
-  public async findOneById(uuid: string): Promise<User | never> {
-    const user = await this.usersRepository.findOneBy({ id: uuid });
+  public async getProfileId(uuid: string): Promise<User | never> {
+    const user = await this.usersRepository.findOneBy({ id: uuid })
     if (!user) throw new NotFoundException();
     return user;
   }
 
-  async createUser (body: CreateUserDto): Promise<User> {
+  async createUser (user: CreateUserDto): Promise<User> {
     const saltOrRounds = 10;
-    body.password = await bcrypt.hash(body.password, saltOrRounds);
-    const newUser = this.usersRepository.create(body)
+    user.password = await bcrypt.hash(user.password, saltOrRounds);
+    const newUser = this.usersRepository.create(user)
       return this.usersRepository.save(newUser)
     }
 
-    public findOneByMail(mail: string): Promise<User | null> {
+    public loginUser(mail: string): Promise<User> {
       return this.usersRepository.findOneBy({
         email: mail,
       });
