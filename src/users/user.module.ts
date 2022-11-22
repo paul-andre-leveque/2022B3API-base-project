@@ -10,7 +10,7 @@ import { User } from './dto/user.entity';
 @Module({
   controllers: [UsersController],
   providers: [UsersService, AuthService,JwtService],
-  imports: [TypeOrmModule.forFeature([User])],
+  imports: [TypeOrmModule.forFeature([User,])],
   exports: [UsersService]
 })
 export class UserModule {}
