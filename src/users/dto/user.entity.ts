@@ -1,7 +1,7 @@
 import { Exclude } from 'class-transformer';
 import { Entity, Column, PrimaryGeneratedColumn} from 'typeorm';
 
-export type UserRole = 'Employee' | 'Admin' | 'ProjectManage' ;
+export type UserRole = 'Employee' | 'Admin' | 'ProjectManager' ;
 @Entity()
 export class User {
   @PrimaryGeneratedColumn("uuid")
