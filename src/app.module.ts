@@ -1,26 +1,23 @@
 /* eslint-disable prettier/prettier */
 import { Module, ValidationPipe } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
-import {TypeOrmModule} from '@nestjs/typeorm';
+import { TypeOrmModule } from '@nestjs/typeorm';
 
 //Module
-
-
 //Entity
-import { User } from './users/dto/user.entity';
-import { Project } from './projects/dto/project.entity';
-import { ProjectUser } from './project-users/project-user.entity';
-import { Event } from './events/event.entity';
+import { User } from './users/model/user.entity';
+import { Project } from './projects/model/project.entity';
+import { ProjectUser } from './project-users/model/project-user.entity';
+import { Event } from './events/controllers/model/event.entity';
 import { UserModule } from './users/user.module';
 import { AuthModule } from './auth/auth.module';
 import { APP_PIPE } from '@nestjs/core';
 
-
 @Module({
   imports: [
-    ConfigModule.forRoot({isGlobal: true}),
+    ConfigModule.forRoot({ isGlobal: true }),
     TypeOrmModule.forRootAsync({
-      imports: [ConfigModule,],
+      imports: [ConfigModule],
       useFactory: (configService: ConfigService) => ({
         type: 'postgres',
         host: configService.get('DB_HOST'),
@@ -28,7 +25,7 @@ import { APP_PIPE } from '@nestjs/core';
         username: configService.get('DB_USERNAME'),
         password: configService.get('DB_PASSWORD'),
         database: configService.get('DB_NAME'),
-        entities: [User,Project,ProjectUser,Event],
+        entities: [User, Project, ProjectUser, Event],
         synchronize: true,
       }),
       inject: [ConfigService],
@@ -37,11 +34,11 @@ import { APP_PIPE } from '@nestjs/core';
     AuthModule,
   ],
   controllers: [],
-  providers: [{
-    provide: APP_PIPE,
-    useClass: ValidationPipe,
-  },],
+  providers: [
+    {
+      provide: APP_PIPE,
+      useClass: ValidationPipe,
+    },
+  ],
 })
-export class AppModule {
-
-}
+export class AppModule {}
