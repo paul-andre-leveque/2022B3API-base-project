@@ -12,6 +12,8 @@ import { Event } from './events/controllers/model/event.entity';
 import { UserModule } from './users/user.module';
 import { AuthModule } from './auth/auth.module';
 import { APP_PIPE } from '@nestjs/core';
+import { ProjectModule } from './projects/project.module';
+import { ProjectUsersModule } from './project-users/project-users.module';
 
 @Module({
   imports: [
@@ -32,6 +34,9 @@ import { APP_PIPE } from '@nestjs/core';
     }),
     UserModule,
     AuthModule,
+    ProjectModule,
+    ProjectUsersModule,
+    // EventsModule,
   ],
   controllers: [],
   providers: [

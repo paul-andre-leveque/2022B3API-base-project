@@ -6,7 +6,8 @@ import {
   IsString,
   MinLength,
 } from 'class-validator';
-import { UserRole } from '../user.entity';
+import { Role } from '../../../auth/interface/enum.role';
+
 
 export class CreateUserDto {
   @IsString()
@@ -24,5 +25,5 @@ export class CreateUserDto {
 
   @IsOptional()
   @IsIn(['Employee', 'Admin', 'ProjectManager'])
-  role: UserRole;
+  role!: Role;
 }

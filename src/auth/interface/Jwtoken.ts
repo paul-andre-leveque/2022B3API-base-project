@@ -1,5 +1,5 @@
 export interface JwtToken {
   sub: string;
   username: string;
-  role: string;
+  role: 'Employee' | 'Admin' | 'ProjectManager';
 }

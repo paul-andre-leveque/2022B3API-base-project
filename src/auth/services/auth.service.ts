@@ -14,12 +14,11 @@ export class AuthService {
 
   async validateUser(email: string, password: string): Promise<User> {
     const user = await this.usersService.loginUser(email);
-    if (user === null) return null;
-
-    const isMatch = await bcrypt.compare(password, user.password);
-    if (isMatch) return user;
-
-    return null;
+    if (user === null)
+      return null;
+    const verifPass = await bcrypt.compare(password, user.password);
+    if (verifPass) return user;
+      return null;
   }
 
   async login(user: User): Promise<{ access_token: string }> {

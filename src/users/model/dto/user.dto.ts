@@ -1,14 +1,21 @@
 import { Exclude } from 'class-transformer';
+import { IsEmail, IsNotEmpty, IsUUID } from 'class-validator';
 
 export class UserDto {
-  id!: string;
+  @IsUUID()
+  @IsNotEmpty()
+  public readonly id!: string;
 
-  username!: string;
+  @IsNotEmpty()
+  public readonly username!: string;
 
-  email!: string;
+  @IsEmail()
+  @IsNotEmpty()
+  public readonly email!: string;
 
   @Exclude()
-  password!: string;
+  public readonly password!: string;
 
-  public role!: 'Employee' | 'Admin' | 'ProjectManager';
+  @IsNotEmpty()
+  public readonly role!: 'Employee' | 'Admin' | 'ProjectManager';
 }
